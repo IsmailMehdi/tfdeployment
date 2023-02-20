@@ -8,12 +8,12 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: somepassword
-      PGDATA: /mnt/disks/pgsql/data
     command: postgres -c config_file=/etc/postgresql/postgresql.conf
     volumes:
       - ./postgres/postgresql.docker.conf:/etc/postgresql/postgresql.conf
       - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
       - pglogs:/var/log/postgresql/:rw
+      - /mnt/disks/pgsql/data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     networks:
