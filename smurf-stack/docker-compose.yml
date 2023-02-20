@@ -8,6 +8,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: somepassword
+      PGDATA: /mnt/disks/pgsql/data
     command: postgres -c config_file=/etc/postgresql/postgresql.conf
     volumes:
       - ./postgres/postgresql.docker.conf:/etc/postgresql/postgresql.conf
