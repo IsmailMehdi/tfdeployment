@@ -66,12 +66,13 @@ services:
   filebeat:
     image: docker.elastic.co/beats/filebeat:8.6.2
     user: root
+    restart: always
     environment:
       - strict.perms=false
-      - setup.kibana.host=kibana:5601
       - output.elasticsearch.hosts=["elasticsearch:9200"]
     volumes:
-      - ./filebeat/config/filebeat.docker.yml:/usr/share/filebeat/filebeat.yml:ro
+      - ./filebeat/config/filebeat.reference.yml:/usr/share/filebeat/filebeat.yml:ro
+      - ./filebeat/config/postgresql.yml:/usr/share/filebeat/modules.d/postgres.yml:ro
       - pglogs:/var/log/postgresql/:ro
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -79,21 +80,24 @@ services:
       - smurf
     depends_on:
       - postgres
+      - kibana
+      - elasticsearch
 
   metricbeat:
     image: docker.elastic.co/beats/metricbeat:8.6.2
     user: root
+    restart: always
     volumes:
-      - ./metricbeat/config/metricbeat.docker.yml:/usr/share/metricbeat/metricbeat.yml:ro
+      - ./metricbeat/config/metricbeat.reference.yml:/usr/share/metricbeat/metricbeat.yml:ro
+      - ./metricbeat/config/postgresql.yml:/usr/share/metricbeat/modules.d/postgresql.yml:ro
+      - ./metricbeat/config/docker.yml:/usr/share/metricbeat/modules.d/docker.yml:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro
-      - /proc:/hostfs/proc:ro
-      - /:/hostfs:ro
     networks:
       - smurf
     depends_on:
       - postgres
-
+      - kibana
+      - elasticsearch
 
 volumes:
   esdata:
