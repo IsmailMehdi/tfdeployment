@@ -30,6 +30,7 @@ services:
   portainer:
     image: portainer/portainer:latest
     restart: always
+    command: --admin-password $$2y$$05$$kji3RS35ikVlkxY0eJFn.uAko8nSqGr/ZvFyPYefiwJzHd0aOmY5O
     ports:
       - 9000:9000
     volumes:
