@@ -3,7 +3,7 @@ version: '3.5'
 services:
 
   postgres:
-    image: postgres
+    image: gcr.io/alloydbadmin-sandbox/postgressmurf_service:latest
     restart: always
     environment:
       POSTGRES_USER: postgres
